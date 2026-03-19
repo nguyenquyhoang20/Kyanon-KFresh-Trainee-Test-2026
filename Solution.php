@@ -1,16 +1,10 @@
 <?php
 
-/**
- * Solution.php
- * Câu 2: Xử lý dữ liệu sản phẩm bằng PHP (OOP)
- *
- * Tác giả: Kyanon KFresh Trainee - 2026
- */
+// =============================================
+// Câu 2: Xử lý dữ liệu sản phẩm bằng PHP (OOP)
+// =============================================
 
-// ============================================================
-// 1. Định nghĩa lớp Product (OOP)
-// ============================================================
-
+// 1. Định nghĩa lớp Product
 class Product
 {
     public int $id;
@@ -25,141 +19,65 @@ class Product
         $this->price    = $price;
         $this->category = $category;
     }
-
-    /**
-     * Hiển thị thông tin sản phẩm dạng chuỗi.
-     */
-    public function __toString(): string
-    {
-        return sprintf(
-            "[ID: %d] %-30s | Giá: %10s VNĐ | Danh mục: %s",
-            $this->id,
-            $this->name,
-            number_format($this->price, 0, ',', '.'),
-            $this->category
-        );
-    }
 }
 
-// ============================================================
 // 2. Khởi tạo danh sách sản phẩm (ít nhất 5 sản phẩm)
-// ============================================================
-
 $products = [
-    new Product(1, 'MacBook Pro 14 inch M3',     45_000_000, 'Laptop'),
-    new Product(2, 'Dell XPS 15',                35_000_000, 'Laptop'),
-    new Product(3, 'iPhone 15 Pro Max',           32_000_000, 'Điện thoại'),
-    new Product(4, 'Samsung Galaxy S24 Ultra',    28_000_000, 'Điện thoại'),
-    new Product(5, 'Sony WH-1000XM5',             8_500_000,  'Phụ kiện'),
-    new Product(6, 'Apple AirPods Pro 2',          6_000_000,  'Phụ kiện'),
-    new Product(7, 'iPad Pro 12.9 inch M2',       26_000_000, 'Máy tính bảng'),
+    new Product(1, 'MacBook Pro M3',        45000000, 'Laptop'),
+    new Product(2, 'Dell XPS 15',           35000000, 'Laptop'),
+    new Product(3, 'iPhone 15 Pro Max',     32000000, 'Điện thoại'),
+    new Product(4, 'Samsung Galaxy S24',    28000000, 'Điện thoại'),
+    new Product(5, 'Sony WH-1000XM5',        8500000, 'Phụ kiện'),
+    new Product(6, 'Apple AirPods Pro 2',    6000000, 'Phụ kiện'),
+    new Product(7, 'iPad Pro M2',           26000000, 'Máy tính bảng'),
 ];
 
-// ============================================================
 // 3. Hàm lọc sản phẩm theo danh mục
-// ============================================================
-
-/**
- * Lọc danh sách sản phẩm theo tên danh mục (không phân biệt hoa thường).
- *
- * @param  Product[] $products     Danh sách sản phẩm đầu vào
- * @param  string    $categoryName Tên danh mục cần lọc
- * @return Product[]               Danh sách sản phẩm thuộc danh mục đó
- */
 function filterProductsByCategory(array $products, string $categoryName): array
 {
     return array_values(
-        array_filter($products, function (Product $product) use ($categoryName): bool {
-            return strcasecmp($product->category, $categoryName) === 0;
-        })
+        array_filter($products, fn($p) => strtolower($p->category) === strtolower($categoryName))
     );
 }
 
-// ============================================================
-// 4. Hàm áp dụng giảm giá
-// ============================================================
-
-/**
- * Giảm giá tất cả sản phẩm theo phần trăm và trả về danh sách mới
- * (không làm thay đổi danh sách gốc – immutable approach).
- *
- * @param  Product[] $products Danh sách sản phẩm gốc
- * @param  float     $percent  Phần trăm giảm giá (ví dụ: 10 = giảm 10%)
- * @return Product[]           Danh sách sản phẩm mới với giá đã cập nhật
- * @throws InvalidArgumentException Nếu phần trăm không hợp lệ (< 0 hoặc > 100)
- */
+// 4. Hàm áp dụng giảm giá (trả về danh sách mới, không thay đổi danh sách gốc)
 function applyDiscount(array $products, float $percent): array
 {
     if ($percent < 0 || $percent > 100) {
-        throw new InvalidArgumentException("Phần trăm giảm giá phải nằm trong khoảng 0 - 100.");
+        throw new InvalidArgumentException('Phần trăm giảm giá phải từ 0 đến 100.');
     }
 
-    $multiplier = 1 - ($percent / 100);
-
-    return array_map(function (Product $product) use ($multiplier): Product {
-        // Tạo bản sao để giữ nguyên object gốc
-        $discounted        = clone $product;
-        $discounted->price = round($product->price * $multiplier, 0);
-        return $discounted;
+    return array_map(function ($p) use ($percent) {
+        $new        = clone $p;
+        $new->price = round($p->price * (1 - $percent / 100));
+        return $new;
     }, $products);
 }
 
-// ============================================================
-// 5. Hàm tiện ích: In danh sách sản phẩm
-// ============================================================
-
-/**
- * In danh sách sản phẩm ra màn hình.
- *
- * @param Product[] $products    Danh sách sản phẩm cần in
- * @param string    $title       Tiêu đề hiển thị
- */
-function printProductList(array $products, string $title = 'Danh sách sản phẩm'): void
+// Hàm tiện ích: in danh sách sản phẩm
+function printProducts(array $products, string $title): void
 {
-    echo "\n" . str_repeat('=', 80) . "\n";
-    echo "  {$title}\n";
-    echo str_repeat('=', 80) . "\n";
-
+    echo "\n--- $title ---\n";
     if (empty($products)) {
-        echo "  (Không có sản phẩm nào.)\n";
-    } else {
-        foreach ($products as $index => $product) {
-            echo "  " . ($index + 1) . ". {$product}\n";
-        }
+        echo "Không có sản phẩm nào.\n";
+        return;
     }
-
-    echo str_repeat('-', 80) . "\n";
-    echo "  Tổng số: " . count($products) . " sản phẩm\n";
+    foreach ($products as $p) {
+        echo '[' . $p->id . '] ' . $p->name . ' | ' . number_format($p->price, 0, ',', '.') . ' VND | ' . $p->category . "\n";
+    }
 }
 
-// ============================================================
-// 6. DEMO – Chạy thử các chức năng
-// ============================================================
+// =============================================
+// Demo chạy thử
+// =============================================
 
-echo "\n";
-echo "╔══════════════════════════════════════════════════════════════════════════════╗\n";
-echo "║          XỬ LÝ DỮ LIỆU SẢN PHẨM BẰNG PHP - KYANON KFRESH 2026            ║\n";
-echo "╚══════════════════════════════════════════════════════════════════════════════╝\n";
+printProducts($products, 'Tất cả sản phẩm');
 
-// --- Hiển thị tất cả sản phẩm ---
-printProductList($products, 'TẤT CẢ SẢN PHẨM');
-
-// --- Lọc theo danh mục: Laptop ---
 $laptops = filterProductsByCategory($products, 'Laptop');
-printProductList($laptops, 'SẢN PHẨM DANH MỤC: Laptop');
+printProducts($laptops, 'Sản phẩm danh mục: Laptop');
 
-// --- Lọc theo danh mục: Phụ kiện ---
 $accessories = filterProductsByCategory($products, 'Phụ kiện');
-printProductList($accessories, 'SẢN PHẨM DANH MỤC: Phụ kiện');
+printProducts($accessories, 'Sản phẩm danh mục: Phụ kiện');
 
-// --- Áp dụng giảm giá 15% cho toàn bộ sản phẩm ---
-$discountPercent   = 15;
-$discountedProducts = applyDiscount($products, $discountPercent);
-printProductList($discountedProducts, "SẢN PHẨM SAU KHI GIẢM GIÁ {$discountPercent}%");
-
-// --- Kết hợp: Lọc Điện thoại rồi giảm 20% ---
-$phones           = filterProductsByCategory($products, 'Điện thoại');
-$discountedPhones = applyDiscount($phones, 20);
-printProductList($discountedPhones, 'ĐIỆN THOẠI ĐƯỢC GIẢM GIÁ 20%');
-
-echo "\nHoàn thành!\n\n";
+$discounted = applyDiscount($products, 15);
+printProducts($discounted, 'Tất cả sản phẩm sau khi giảm giá 15%');

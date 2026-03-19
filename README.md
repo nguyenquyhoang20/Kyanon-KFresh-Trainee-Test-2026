@@ -32,7 +32,7 @@ Mã nguồn PHP thuần (không cần framework) sử dụng tư duy **OOP**:
 
 ---
 
-## ▶️ Cách Chạy File PHP
+## Cách Chạy File PHP
 
 ### Yêu cầu
 - PHP >= 8.0 đã được cài đặt và thêm vào PATH.
@@ -55,17 +55,9 @@ Script sẽ in ra console:
 
 ---
 
-## 🛠️ Các Bước Thực Hiện
+##  Các Bước Thực Hiện
 
 1. Nghiên cứu đề bài và tìm hiểu về Magento, Drupal, Headless CMS.
 2. Viết báo cáo nghiên cứu vào `Report.md`.
 3. Xây dựng giải pháp PHP với tư duy OOP vào `Solution.php`.
 4. Khởi tạo Git repository, commit và push lên GitHub.
-
----
-
-## 👤 Thông Tin
-
-- **Vị trí ứng tuyển**: Magento/Drupal Trainee
-- **Đơn vị**: [Kyanon Digital](https://kyanon.digital)
-- **Năm**: 2026
