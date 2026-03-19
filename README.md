@@ -24,7 +24,7 @@ Báo cáo nghiên cứu khoảng 300–500 chữ, bao gồm:
 - Giải thích khái niệm **Headless CMS** và lợi thế trong phát triển web hiện đại.
 
 ### Câu 2 – `Solution.php`
-Mã nguồn PHP thuần (không cần framework) sử dụng tư duy **OOP**:
+Mã nguồn PHP 
 - Lớp `Product` với các thuộc tính: `id`, `name`, `price`, `category`.
 - Hàm `filterProductsByCategory($products, $categoryName)` – lọc sản phẩm theo danh mục.
 - Hàm `applyDiscount($products, $percent)` – giảm giá toàn bộ sản phẩm, trả về danh sách mới (immutable).
